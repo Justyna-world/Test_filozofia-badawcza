@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test HARP</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 900px; }
+    h1 { color: #2c3e50; }
+    .question { margin-bottom: 20px; }
+    .result { font-weight: bold; margin-top: 30px; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>Test HARP – Twoja filozofia badawcza</h1>
+  <form id="harpForm">
+    <div id="questions"></div>
+    <button type="submit">Oblicz wynik</button>
+  </form>
+  <div id="result" class="result"></div>
+
+  <script>
+    const scales = {
+      '3': 'Zdecydowanie się zgadzam',
+      '2': 'Zgadzam się',
+      '1': 'Nieznacznie się zgadzam',
+      '-1': 'Nieznacznie się nie zgadzam',
+      '-2': 'Nie zgadzam się',
+      '-3': 'Zdecydowanie się nie zgadzam'
+    };
+
+    const questions = [
+      { text: "Organizacje są realne, tak jak obiekty fizyczne.", philosophy: "Pozytywizm" },
+      { text: "Wydarzenia w organizacjach są powodowane przez głębsze, ukryte mechanizmy.", philosophy: "Krytyczny realizm" },
+      { text: "Świat społeczny to świat wielu znaczeń, interpretacji i rzeczywistości.", philosophy: "Interpretatywizm" },
+      { text: "Organizacja nie jest stała – to strumień zbiorowych procesów i praktyk.", philosophy: "Postmodernizm" },
+      { text: "Prawdziwe aspekty organizacji to te, które wpływają na praktykę.", philosophy: "Pragmatyzm" },
+
+      { text: "Badania organizacyjne powinny dostarczać naukowych, obiektywnych i dokładnych wyjaśnień działania organizacji.", philosophy: "Pozytywizm" },
+      { text: "Teorie nie dają całkowicie pewnej wiedzy, ale można wybrać lepsze spośród nich.", philosophy: "Krytyczny realizm" },
+      { text: "Koncepcje i teorie są zbyt uproszczone, by uchwycić pełne bogactwo świata.", philosophy: "Interpretatywizm" },
+      { text: "To, co uważane jest za prawdziwe, jest określane przez dominujące politycznie poglądy.", philosophy: "Postmodernizm" },
+      { text: "Akceptowalna wiedza to taka, która pomaga skutecznie działać.", philosophy: "Pragmatyzm" },
+
+      { text: "Z badań należy wykluczyć wartości i przekonania badaczy.", philosophy: "Pozytywizm" },
+      { text: "Naukowcy powinni dążyć do maksymalnej obiektywności i realizmu.", philosophy: "Krytyczny realizm" },
+      { text: "Wartości i przekonania badaczy są kluczowe dla ich interpretacji rzeczywistości.", philosophy: "Interpretatywizm" },
+      { text: "Badacze powinni otwarcie dyskutować o własnych wartościach.", philosophy: "Postmodernizm" },
+      { text: "Badania są kształtowane przez to, w co badacz wierzy i co podważa.", philosophy: "Pragmatyzm" },
+
+      { text: "Celem badań jest odkrycie faktów i przewidywanie zdarzeń.", philosophy: "Pozytywizm" },
+      { text: "Badania wyjaśniają, jak i dlaczego organizacje są zorganizowane.", philosophy: "Krytyczny realizm" },
+      { text: "Celem jest tworzenie nowych sposobów postrzegania świata.", philosophy: "Interpretatywizm" },
+      { text: "Celem jest badanie i kwestionowanie relacji władzy.", philosophy: "Postmodernizm" },
+      { text: "Celem jest rozwiązywanie problemów i ulepszanie praktyk.", philosophy: "Pragmatyzm" },
+
+      { text: "Rzeczy, których nie da się zmierzyć, nie mają znaczenia w badaniach.", philosophy: "Pozytywizm" },
+      { text: "Teorie należy oceniać pod kątem wyjaśniania przyczyn zachowań.", philosophy: "Krytyczny realizm" },
+      { text: "Badania muszą uwzględniać interpretacje uczestników i badaczy.", philosophy: "Interpretatywizm" },
+      { text: "Nieobecności i przemilczenia są równie ważne jak to, co oczywiste.", philosophy: "Postmodernizm" },
+      { text: "Znaczenie wyłania się z praktycznego zaangażowania w świat.", philosophy: "Pragmatyzm" },
+
+      { text: "Ludzkie zachowanie jest zdeterminowane przez siły natury.", philosophy: "Pozytywizm" },
+      { text: "Działania ludzi są ograniczone przez normy społeczne i tradycje.", philosophy: "Krytyczny realizm" },
+      { text: "Tworzenie znaczeń zależy od doświadczeń, kultury i historii.", philosophy: "Interpretatywizm" },
+      { text: "Struktura i porządek są konstrukcjami społecznymi.", philosophy: "Postmodernizm" },
+      { text: "Ludzie mogą twórczo zmieniać rutyny i zwyczaje.", philosophy: "Pragmatyzm" }
+    ];
+
+    const points = { "Pozytywizm": 0, "Krytyczny realizm": 0, "Interpretatywizm": 0, "Postmodernizm": 0, "Pragmatyzm": 0 };
+
+    const qDiv = document.getElementById("questions");
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.classList.add("question");
+      div.innerHTML = `<p><strong>${i + 1}. ${q.text}</strong></p>` +
+        Object.keys(scales).map(val => 
+          `<label><input type="radio" name="q${i}" value="${val}" required> ${scales[val]}</label><br>`
+        ).join("");
+      qDiv.appendChild(div);
+    });
+
+    document.getElementById("harpForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      questions.forEach((q, i) => {
+        const val = parseInt(formData.get("q" + i));
+        points[q.philosophy] += val;
+      });
+      const max = Math.max(...Object.values(points));
+      const dominant = Object.entries(points).filter(([k, v]) => v === max).map(([k]) => k);
+
+      let feedback = `Dominująca tradycja badawcza: ${dominant.join(", ")} (wynik: ${max})\n\n`;
+      for (const [k, v] of Object.entries(points)) {
+        feedback += `${k}: ${v} punktów\n`;
+      }
+
+      document.getElementById("result").innerText = feedback;
+    });
+  </script>
+</body>
+</html>
