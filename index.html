@@ -29,38 +29,35 @@
       '-3': 'Zdecydowanie się nie zgadzam'
     };
 
+    const orderedScaleKeys = ['3', '2', '1', '-1', '-2', '-3'];
+
     const questions = [
       { text: "Organizacje są realne, tak jak obiekty fizyczne.", philosophy: "Pozytywizm" },
       { text: "Wydarzenia w organizacjach są powodowane przez głębsze, ukryte mechanizmy.", philosophy: "Krytyczny realizm" },
       { text: "Świat społeczny to świat wielu znaczeń, interpretacji i rzeczywistości.", philosophy: "Interpretatywizm" },
       { text: "Organizacja nie jest stała – to strumień zbiorowych procesów i praktyk.", philosophy: "Postmodernizm" },
       { text: "Prawdziwe aspekty organizacji to te, które wpływają na praktykę.", philosophy: "Pragmatyzm" },
-
-      { text: "Badania organizacyjne powinny dostarczać naukowych, obiektywnych i dokładnych wyjaśnień działania organizacji.", philosophy: "Pozytywizm" },
+      { text: "Badania organizacyjne powinny dostarczać naukowych, obiektywnych i wiarygodnych wyjaśnień działania organizacji.", philosophy: "Pozytywizm" },
       { text: "Teorie nie dają całkowicie pewnej wiedzy, ale można wybrać lepsze spośród nich.", philosophy: "Krytyczny realizm" },
       { text: "Koncepcje i teorie są zbyt uproszczone, by uchwycić pełne bogactwo świata.", philosophy: "Interpretatywizm" },
       { text: "To, co uważane jest za prawdziwe, jest określane przez dominujące politycznie poglądy.", philosophy: "Postmodernizm" },
       { text: "Akceptowalna wiedza to taka, która pomaga skutecznie działać.", philosophy: "Pragmatyzm" },
-
       { text: "Z badań należy wykluczyć wartości i przekonania badaczy.", philosophy: "Pozytywizm" },
       { text: "Naukowcy powinni dążyć do maksymalnej obiektywności i realizmu.", philosophy: "Krytyczny realizm" },
       { text: "Wartości i przekonania badaczy są kluczowe dla ich interpretacji rzeczywistości.", philosophy: "Interpretatywizm" },
       { text: "Badacze powinni otwarcie dyskutować o własnych wartościach.", philosophy: "Postmodernizm" },
       { text: "Badania są kształtowane przez to, w co badacz wierzy i co podważa.", philosophy: "Pragmatyzm" },
-
       { text: "Celem badań jest odkrycie faktów i przewidywanie zdarzeń.", philosophy: "Pozytywizm" },
       { text: "Badania wyjaśniają, jak i dlaczego organizacje są zorganizowane.", philosophy: "Krytyczny realizm" },
-      { text: "Celem jest tworzenie nowych sposobów postrzegania świata.", philosophy: "Interpretatywizm" },
-      { text: "Celem jest badanie i kwestionowanie relacji władzy.", philosophy: "Postmodernizm" },
-      { text: "Celem jest rozwiązywanie problemów i ulepszanie praktyk.", philosophy: "Pragmatyzm" },
-
+      { text: "Celem badań jest tworzenie nowych sposobów postrzegania świata.", philosophy: "Interpretatywizm" },
+      { text: "Celem badawczym jest badanie i kwestionowanie relacji władzy.", philosophy: "Postmodernizm" },
+      { text: "Celem badań jest rozwiązywanie problemów i ulepszanie praktyk.", philosophy: "Pragmatyzm" },
       { text: "Rzeczy, których nie da się zmierzyć, nie mają znaczenia w badaniach.", philosophy: "Pozytywizm" },
       { text: "Teorie należy oceniać pod kątem wyjaśniania przyczyn zachowań.", philosophy: "Krytyczny realizm" },
       { text: "Badania muszą uwzględniać interpretacje uczestników i badaczy.", philosophy: "Interpretatywizm" },
       { text: "Nieobecności i przemilczenia są równie ważne jak to, co oczywiste.", philosophy: "Postmodernizm" },
       { text: "Znaczenie wyłania się z praktycznego zaangażowania w świat.", philosophy: "Pragmatyzm" },
-
-      { text: "Ludzkie zachowanie jest zdeterminowane przez siły natury.", philosophy: "Pozytywizm" },
+      { text: "Ludzkie zachowanie jest zdeterminowane przez naturalne siły.", philosophy: "Pozytywizm" },
       { text: "Działania ludzi są ograniczone przez normy społeczne i tradycje.", philosophy: "Krytyczny realizm" },
       { text: "Tworzenie znaczeń zależy od doświadczeń, kultury i historii.", philosophy: "Interpretatywizm" },
       { text: "Struktura i porządek są konstrukcjami społecznymi.", philosophy: "Postmodernizm" },
@@ -74,7 +71,7 @@
       const div = document.createElement("div");
       div.classList.add("question");
       div.innerHTML = `<p><strong>${i + 1}. ${q.text}</strong></p>` +
-        Object.keys(scales).map(val => 
+        orderedScaleKeys.map(val => 
           `<label><input type="radio" name="q${i}" value="${val}" required> ${scales[val]}</label><br>`
         ).join("");
       qDiv.appendChild(div);
@@ -90,9 +87,12 @@
       const max = Math.max(...Object.values(points));
       const dominant = Object.entries(points).filter(([k, v]) => v === max).map(([k]) => k);
 
-      let feedback = `Dominująca tradycja badawcza: ${dominant.join(", ")} (wynik: ${max})\n\n`;
+      let feedback = `Dominująca tradycja badawcza: ${dominant.join(", ")} (wynik: ${max})
+
+`;
       for (const [k, v] of Object.entries(points)) {
-        feedback += `${k}: ${v} punktów\n`;
+        feedback += `${k}: ${v} punktów
+`;
       }
 
       document.getElementById("result").innerText = feedback;
